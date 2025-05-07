@@ -42,6 +42,9 @@ class Product:
         self.price = price
         self.quantity = quantity
 
+    def __str__(self):
+        return f"{self.name}, {self.price} руб. (Остаток: {self.quantity} шт.)"
+
 
 class Category:
     # Атрибуты класса для хранения общей информации
@@ -63,3 +66,47 @@ class Category:
         # Увеличение атрибутов класса
         Category.category_count += 1
         Category.product_count += len(self.products)
+
+    def add_product(self, product):
+        """
+        Add a product to the category and update counters
+
+        Args:
+            product: Product object to add to the category
+
+        Returns:
+            True if product was added, False if it's already in the category
+        """
+        # Check if product is already in the category
+        if product not in self.products:
+            self.products.append(product)
+            # Increment the total unique products counter
+            Category.total_unique_products += 1
+            return True
+        return False
+
+    def remove_product(self, product):
+        """
+        Remove a product from the category and update counters
+
+        Args:
+            product: Product object to remove from the category
+
+        Returns:
+            True if product was removed, False if it wasn't in the category
+        """
+        if product in self.products:
+            self.products.remove(product)
+            # Decrement the total unique products counter
+            Category.total_unique_products -= 1
+            return True
+        return False
+
+    def __str__(self):
+        # Format the category information with product count
+        return f"{self.name}, {self.description} (количество продуктов: {len(self.products)})"
+
+    @property
+    def product_count(self):
+        """Returns the number of products in this category"""
+        return len(self.products)
