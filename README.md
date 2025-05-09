@@ -23,3 +23,4 @@
     подсчет количества категорий.
 
     #pytest #assert #fixtures
+
