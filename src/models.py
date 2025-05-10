@@ -52,10 +52,10 @@ class Product:
 
     @price.setter
     def price(self, value):
-        if value < 0:
-            raise ValueError("Цена не может быть меньше нуля")
+        if value <= 0:
+            print(f"Некорректная цена: {value}. Цена товара должна быть больше нуля.")
+            raise ValueError("Цена не может быть меньше или равна нулю")
         self.__price = value
-
 
 
 class Category:
@@ -87,11 +87,15 @@ class Category:
         """
         return self.__products
 
-    def add_product(self, product: Product):
+    def add_product(self, product):
         """
         Добавление товара в категорию
-        :param product: объект класса Product
+        :param product: объект класса Product или его наследника
+        :raises TypeError: если передан объект неправильного типа
         """
+        if not isinstance(product, Product):
+            raise TypeError("В категорию можно добавлять только объекты класса Product или его наследников")
+
         self.__products.append(product)
         Category.product_count += 1
 
