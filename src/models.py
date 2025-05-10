@@ -1,30 +1,3 @@
-"""
-Создайте классы Product и Category
-Для класса Product определите следующие свойства:
-    название (name),
-    описание (description),
-    цена (price),
-    количество в наличии (quantity).
-Для класса Category определите следующие свойства:
-    название (name),
-    описание (description),
-    список товаров категории (products).
-Для этих двух классов добавьте инициализацию так, чтобы каждый параметр был передан при создании объекта и сохранен.
-Также для класса Category добавьте два атрибута класса.
-Доступ к этим атрибутам должен быть у каждого объекта класса, и в них должна храниться общая информация для всех объектов.
-Эти атрибуты хранят в себе количество категорий и количество товаров.
-Атрибуты класса должны заполняться автоматически при инициализации нового объекта.
-Здесь нет необходимости считать количество на складе, можно посчитать длину списка с товарами.
-(требуется только создать класс и описать атрибуты, которые будут принадлежать к каждому классу.
-нужно сделать описание типов данных тех значений, которые будут храниться в атрибутах.
-Для каждого поля используйте наиболее подходящий тип данных, цена может быть указана с копейками,
-а количество лучше измерять в штуках. у класса «Категории» в списке товаров должны храниться именно объекты класса продуктов,
-в атрибуте «Список товаров категории» должен быть список объектов класса Product.)
-Важно определить, что принимает на вход метод инициализации, а также какие атрибуты используются через
-self, а какие через Category, чтобы соблюсти доступность сохраненной информации для всех объектов класса
-Category. Для автоматического заполнения атрибутов класса Category добавьте в код инициализации увеличение
-значения атрибутов класса на необходимые значения Category.атрибут += значение
-"""
 
 
 class Product:
@@ -39,11 +12,50 @@ class Product:
         """
         self.name = name
         self.description = description
-        self.price = price
+        self.__price = price
         self.quantity = quantity
 
     def __str__(self):
-        return f"{self.name}, {self.price} руб. (Остаток: {self.quantity} шт.)"
+        return f"{self.name}, {self.__price} руб. (Остаток: {self.quantity} шт.)"
+
+    @classmethod
+    def new_product(cls, params: dict, products: list = None):
+        """
+        Создает новый экземпляр Product из словаря параметров.
+        Если товар с таким же именем уже существует, обновляет его количество и выбирает максимальную цену.
+
+        :param params: словарь с параметрами товара (name, description, price, quantity)
+        :param products: список товаров, в которых нужно искать дубликаты (по имени)
+        :return: новый или обновленный экземпляр Product
+        """
+        if products is None:
+            products = []
+
+        # Поиск товара с таким же именем
+        for product in products:
+            if product.name.lower() == params["name"].lower():
+                # Обновление количества и выбор максимальной цены
+                product.quantity += params["quantity"]
+                product.price = max(product.price, params["price"])
+                return product
+
+        # Если дубликат не найден, создаем новый товар
+        return cls(
+            name=params["name"],
+            description=params["description"],
+            price=params["price"],
+            quantity=params["quantity"]
+        )
+    @property
+    def price(self):
+        return self.__price
+
+    @price.setter
+    def price(self, value):
+        if value < 0:
+            raise ValueError("Цена не может быть меньше нуля")
+        self.__price = value
+
 
 
 class Category:
@@ -61,9 +73,34 @@ class Category:
         """
         self.name = name
         self.description = description
-        self.products = products if products is not None else []
+        self.__products = products if products is not None else []
 
         # Увеличение атрибутов класса
         Category.category_count += 1
-        Category.product_count += len(self.products)
+        Category.product_count += len(self.__products)
+
+    @property
+    def products(self):
+        """
+        Геттер для получения списка товаров категории
+        :return: список товаров категории
+        """
+        return self.__products
+
+    def add_product(self, product: Product):
+        """
+        Добавление товара в категорию
+        :param product: объект класса Product
+        """
+        self.__products.append(product)
+        Category.product_count += 1
+
+    def remove_product(self, product: Product):
+        """
+        Удаление товара из категории
+        :param product: объект класса Product
+        """
+        if product in self.__products:
+            self.__products.remove(product)
+            Category.product_count -= 1
 
