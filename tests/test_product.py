@@ -1,6 +1,6 @@
 import unittest
-from src.models import Product, Category
-
+from src.product import Product
+from src.category import Category
 
 class TestProduct(unittest.TestCase):
     def test_product_initialization(self):
@@ -28,39 +28,29 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(new_product.quantity, 15)
         self.assertEqual(Category.product_count, 2)
 
-
-class TestCategory(unittest.TestCase):
     def setUp(self):
-        # Сброс аттрибутов класса перед следующим тестом
-        Category.category_count = 0
-        Category.product_count = 0
+        # Создаю несколько тестовых продуктов
+        self.product1 = Product("Laptop", "Powerful laptop", 50000.0, 5)
+        self.product2 = Product("Phone", "Smartphone", 20000.0, 10)
+        self.product3 = Product("Tablet", "Android tablet", 15000.0, 8)
 
-    def test_category_initialization(self):
-        category = Category("Test Category", "Test Description")
-        self.assertEqual(category.name, "Test Category")
-        self.assertEqual(category.description, "Test Description")
-        self.assertEqual(category.products, [])
+        # Создаю список продуктов для тестирования
+        self.products_list = [self.product1, self.product2, self.product3]
 
-    def test_category_count(self):
-        Category("Category 1", "Description 1")
-        self.assertEqual(Category.category_count, 1)
-        Category("Category 2", "Description 2")
-        self.assertEqual(Category.category_count, 2)
+    def test_get_products_string(self):
+        # Тест статического метода
+        products_string = Product.get_products_string(self.products_list)
 
-    def test_product_count(self):
-        product1 = Product("Product 1", "Description 1", 100, 10)
-        product2 = Product("Product 2", "Description 2", 200, 20)
+        # Ожидаемый результат
+        expected = "1. Laptop, 50000.0 руб. (Остаток: 5 шт.)\n" \
+                   "2. Phone, 20000.0 руб. (Остаток: 10 шт.)\n" \
+                   "3. Tablet, 15000.0 руб. (Остаток: 8 шт.)"
 
-        Category("Category 1", "Description 1", [product1])
-        self.assertEqual(Category.product_count, 1)
+        # Сравнение результата с ожидаемым результатом
+        self.assertEqual(products_string, expected)
 
-        Category("Category 2", "Description 2", [product2])
-        self.assertEqual(Category.product_count, 2)
-
-    def test_add_product(self):
-        category = Category("Test Category", "Test Description")
-        product = Product("Test Product", "Test Description", 100, 10)
-        category.add_product(product)
-        self.assertIn(product, category.products)
-        self.assertEqual(Category.product_count, 1)
+    def test_empty_products_list(self):
+        # Тест для пустого списка продуктов
+        empty_string = Product.get_products_string([])
+        self.assertEqual(empty_string, "Список продуктов пуст")
 

@@ -4,7 +4,8 @@ from io import StringIO
 import datetime
 
 # Импортируем тестовые классы
-from src.test_models import TestProduct, TestCategory
+from tests.test_product import TestProduct
+from tests.test_category import TestCategory
 
 # Создаем тестовый загрузчик
 loader = unittest.TestLoader()
