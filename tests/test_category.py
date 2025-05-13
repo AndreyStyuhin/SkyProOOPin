@@ -1,22 +1,6 @@
 import unittest
-from src.models import Product, Category
-
-
-class TestProduct(unittest.TestCase):
-    def test_product_initialization(self):
-        '''
-        тесты для классов, которые проверяют:
-            корректность инициализации объектов класса
-            Category, корректность инициализации объектов класса
-            Product, подсчет количества продуктов,
-            подсчет количества категорий.
-            #pytest #assert #fixtures
-        '''
-        product = Product("Test Product", "Test Description", 100, 10)
-        self.assertEqual(product.name, "Test Product")
-        self.assertEqual(product.description, "Test Description")
-        self.assertEqual(product.price, 100)
-        self.assertEqual(product.quantity, 10)
+from src.product import Product
+from src.category import Category
 
 
 class TestCategory(unittest.TestCase):
@@ -46,3 +30,11 @@ class TestCategory(unittest.TestCase):
 
         Category("Category 2", "Description 2", [product2])
         self.assertEqual(Category.product_count, 2)
+
+    def test_add_product(self):
+        category = Category("Test Category", "Test Description")
+        product = Product("Test Product", "Test Description", 100, 10)
+        category.add_product(product)
+        self.assertIn(product, category.products)
+        self.assertEqual(Category.product_count, 1)
+
