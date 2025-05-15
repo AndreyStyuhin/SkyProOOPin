@@ -72,3 +72,5 @@ class Product:
     @classmethod
     def get_products_string(cls, search_str: object, params: object) -> None:
         pass
+
+
