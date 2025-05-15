@@ -1,5 +1,5 @@
-from src.models import Product, Category
-
+from src.product import Product
+from src.category import Category
 
 if __name__ == "__main__":
     product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
@@ -30,3 +30,16 @@ if __name__ == "__main__":
     print("\nПроверка обновления товара:")
     print(f"Количество: {product1.quantity}")  # Ожидается 8 (5 + 3)
     print(f"Цена: {product1.price}")          # Ожидается 190000.0 (максимум из 180000 и 190000)
+
+    # Проверка вывода информации о товарах
+    print("\nИнформация о товарах в категории:")
+    category1 = Category("Фрукты", "Фрукты и овощи")
+    category1.add_product(Product("Яблоко", 80.5, 15, "Фрукты"))
+    category1.add_product(Product("Банан", 119.99, 20, "Фрукты"))
+
+    # Получение исходных объектов
+    print("Объекты продуктов:", category1.products)
+
+    # Получение форматированных строк с информацией о продуктах
+    for info in category1.products_info:
+        print(info)
