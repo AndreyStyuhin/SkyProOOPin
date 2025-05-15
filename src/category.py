@@ -1,6 +1,5 @@
+
 from src.product import Product
-
-
 
 class Category:
     # Атрибуты класса для хранения общей информации
@@ -37,11 +36,15 @@ class Category:
         Геттер для получения отформатированной информация о товарах в категории
         :return: информация о товарах в формате "Название, Х руб. Остаток: Х шт."
         """
-        return [
-            f"{p.name}, {int(p.price)} руб. Остаток: {p.quantity} шт."
-            for p in self.__products
-        ]
+        return [str(product) for product in self.__products]
 
+    def __str__(self):
+        """
+        Строковое представление категории
+        :return: строка в формате "Название категории, количество продуктов: X шт."
+        """
+        total_quantity = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total_quantity} шт."
 
     def add_product(self, product):
         """
@@ -64,5 +67,4 @@ class Category:
             self.__products.remove(product)
             Category.product_count -= 1
 
-
-
+# category.py

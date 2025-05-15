@@ -1,5 +1,6 @@
+
 class Product:
-    def __init__(self, name: str, description: str, price: float, quantity: int):
+    def __init__(self, name: str, description: str, price: float, quantity: int) -> None:
         """
         Инициализация объекта Product
 
@@ -13,9 +14,9 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
-
     def __str__(self):
-        return f"{self.name}, {self.__price} руб. (Остаток: {self.quantity} шт.)"
+        return f"{self.name}, {int(self.__price)} руб. Остаток: {self.quantity} шт."
+
 
     @classmethod
     def new_product(cls, params: dict, products: list = None):
@@ -45,9 +46,12 @@ class Product:
             price=params["price"],
             quantity=params["quantity"]
         )
+
+
     @property
     def price(self):
         return self.__price
+
 
     @price.setter
     def price(self, value):
@@ -56,4 +60,17 @@ class Product:
             raise ValueError("Цена не может быть меньше или равна нулю")
         self.__price = value
 
-   #main.py
+    def __add__(self, other):
+        if isinstance(other, Product):
+            # Сложение двух продуктов возвращает сумму их цен
+            return self.price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError("Unsupported operand type for +: 'Product' and '{}'".format(type(other).__name__))
+
+    # src/category.py
+    # main.py
+    @classmethod
+    def get_products_string(cls, search_str: object, params: object) -> None:
+        pass
+
+
