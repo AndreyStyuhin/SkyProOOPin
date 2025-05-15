@@ -31,6 +31,18 @@ class Category:
         """
         return self.__products
 
+    @property
+    def products_info(self):
+        """
+        Геттер для получения отформатированной информация о товарах в категории
+        :return: информация о товарах в формате "Название, Х руб. Остаток: Х шт."
+        """
+        return [
+            f"{p.name}, {int(p.price)} руб. Остаток: {p.quantity} шт."
+            for p in self.__products
+        ]
+
+
     def add_product(self, product):
         """
         Добавление товара в категорию
@@ -51,4 +63,6 @@ class Category:
         if product in self.__products:
             self.__products.remove(product)
             Category.product_count -= 1
+
+
 
