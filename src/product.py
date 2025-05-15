@@ -56,21 +56,4 @@ class Product:
             raise ValueError("Цена не может быть меньше или равна нулю")
         self.__price = value
 
-    @staticmethod
-    def get_products_string(products: list) -> str:
-        """
-        Возвращает строковое представление списка продуктов
-
-        :param products: список продуктов
-        :return: строковое представление списка продуктов
-        """
-        if not products:
-            return "Список продуктов пуст"
-
-        result = []
-        for i, product in enumerate(products, 1):
-            result.append(f"{i}. {product}")
-
-        return "\n".join(result)
-
-    #main.py
+   #main.py
